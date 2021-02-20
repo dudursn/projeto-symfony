@@ -1,0 +1,30 @@
+{#
+options:
+    form_class: default: "form-inline form-pesquisa"
+    search_label: default: ""
+    search_icon_class: default: "fa-search"
+    reset_label: default: ""
+    reset_show: default: true
+#}
+
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{{ form_start(form) }}
+    {{ form_widget(form, {'attr': {'class': form_class|default('form-inline form-pesquisa') }}) }}
+    <div class="pesquisa_buttons">
+        <div class="form-group">
+            <button type="submit" id="pesquisa_submit" class="btn btn-primary" name="pesquisa_submit" title="Clique para pesquisar" value="1">
+                <i class="fa {{ search_icon_class|default('fa-search') }}"></i> 
+                {{ search_label|default('') }}
+            </button>
+        </div>
+        {% if reset_show is defined?reset_show:true %}
+        <div class="form-group">
+            <button type="submit" id="pesquisa_reset" class="btn btn-secondary" name="pesquisa_reset" title="Limpar os filtros da pesquisa" value="1">
+                <i class="fa fa-ban"></i> 
+                {{ reset_label|default('') }}
+            </button>
+        </div>        
+        {% endif %}
+    </div>
+{{ form_end(form) }}

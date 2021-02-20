@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %} Votos {% endblock %}
+
+{#
+{% set menu = {
+    'Eleições': {'href': path('admin-eleicoes'), 'title': 'Acesse a Gestão de Eleições para adicionar um Voto', 'icon': 'cog'},
+} %}
+#}
+
+{% block body %}
+    {#
+    {{ include('_helpers/form_pesquisa.html.twig', {form: form}, with_context = false) }} 
+    #}
+    {% if paginator is iterable and paginator|length > 0 %}
+        <div class="table-responsive"><table class="table table-hover">
+                <caption> Registros encontrados... </caption>
+                <thead>
+                    <tr>
+                        <th>Eleição</th><th>Voto</th><th>Data</th><th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="100"> {{ knp_pagination_render(paginator) }} </td> 
+                    </tr>        
+                </tfoot>
+                <tbody>
+                    {% for item in paginator %}
+                        <tr>
+                            <td class="link">
+                                <a href="{{ path('votos-voto', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Voto">
+                                    <strong>{{ item.eleicao.ano }}</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('votos-voto', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Voto">
+                                    <strong class="">{{ item.candidato.apelido }} #{{- item.candidato.numero }}</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('votos-voto', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Voto">
+                                     {{ item.view('criacao') }}
+                                </a>
+                            </td>
+                            <td class="actions">
+                                {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS')  %}
+                                    <a class="btn btn-danger" href="javascript: " title="Exclua este registro" onclick="excluirItemAjax('{{ path('votos-excluir', {'id': item.id}) }}', $(this).parent().parent());"><i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+        {% else %}
+        <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+    {% endif %}
+
+{% endblock body %}

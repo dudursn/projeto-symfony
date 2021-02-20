@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% block title %} Candidatos {% endblock %}
+
+{% set menu = {
+    'Eleições': {'href': path('admin-eleicoes'), 'title': 'Acesse a Gestão de Eleições para adicionar um Candidato', 'icon': 'cog'},
+} %}
+
+{% block body %}
+    {{ include('_helpers/form_pesquisa.html.twig', {form: form}, with_context = false) }} 
+    
+    {% if paginator is iterable and paginator|length > 0 %}
+        <div class="table-responsive"><table class="table table-hover">
+                <caption> Registros encontrados... </caption>
+                <thead>
+                    <tr>
+                        <th>Eleição</th><th>Apelido</th><th>Número</th><th>Usuário</th><th>Votos</th><th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="100"> {{ knp_pagination_render(paginator) }} </td> 
+                    </tr>        
+                </tfoot>
+                <tbody>
+                    {% for item in paginator %}
+                        <tr>
+                            <td class="link">
+                                <a href="{{ path('admin-candidatos-candidato', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Candidato">
+                                    <strong>{{ item.eleicao.ano }}</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-candidatos-candidato', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Candidato">
+                                    <strong class="text-primary">{{ item.apelido }}</strong> <br/>
+                                    <span class="text-primary">{{ item.view('mandato_nome') }}</span> <br/>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-candidatos-candidato', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Candidato">
+                                    <strong class="text-primary">{{ item.numero }}</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-candidatos-candidato', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Candidato">
+                                    <strong class="text-primary">{{ item.usuario.nome }} ({{ item.usuario.view('doc') }})</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-candidatos-candidato', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Candidato">
+                                    <strong class="text-primary">{{ item.votosQtd }} </strong>
+                                </a>
+                            </td>
+                            <td class="actions">
+                                {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS')  %}
+                                    <a class="btn btn-danger" href="javascript: " title="Exclua este registro" onclick="excluirItemAjax('{{ path('admin-candidatos-excluir', {'id': item.id}) }}', $(this).parent().parent());"><i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+        {% else %}
+        <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+    {% endif %}
+
+{% endblock body %}

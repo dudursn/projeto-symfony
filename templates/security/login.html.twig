@@ -1,0 +1,75 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %} Acesse o Sistema {% endblock %}
+
+{% block body %}
+    <!-- Nested Row within Card Body -->
+    <form id="form_login" name="form_login" enctype="application/x-www-form-urlencoded" method="post" action="" class="user form-vertical">
+        <div class="form-group">
+            <label for="email" class="sr-only">E-mail</label>
+            <input type="email" value="{{ last_username }}" name="email" id="email" value="" class="form-control" maxlength="255" placeholder="E-mail" autofocus="autofocus" required="required">
+        </div>
+        <div class="form-group">
+            <label for="pass" class="sr-only">Senha</label>
+            <input type="password" name="password" id="pass" value="" class="form-control" maxlength="255" placeholder="Senha" required="required">
+        </div>
+        <div class="form-group">
+            <div class="custom-control custom-checkbox small">
+                <input type="checkbox"  name="_remember_me" class="custom-control-input" id="customCheck">
+                <label class="custom-control-label" for="customCheck">Manter conectado</label>
+            </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button type="submit" class="btn btn-success btn-user btn-block">Acessar</button>
+        <hr>
+        <a href="{{ path('registro') }}" class="btn btn-google btn-user btn-block"> <i class="fa fa-user-circle fa-fw"></i> Fazer Cadastro </a>
+        <hr>
+        <div class="text-center">
+            <a href="#" data-toggle="modal" data-target="#esqueciMinhaSenha"> Esqueci Minha Senha </a>
+        </div>
+    </form>
+
+    <div class="text-center">
+        <!--
+        <a class="" href="{{ path('index') }}">Esqueci Minha Senha</a>
+        -->
+        {% if is_granted('ROLE_USER') %}
+            <br/><br/>
+            <a class="" href="{{ path('index') }}">Voltar ao Sistema</a>
+        {% endif %}
+    </div>    
+
+   <!-- Modal para Esqueci minha senha -->
+    <div class="modal fade" id="esqueciMinhaSenha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="form_recupera_senha" name="form_recupera_senha" enctype="application/x-www-form-urlencoded" method="post" action="{{ path('app_recupera_senha')}}" >
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Recuperação de senha</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                       
+                        <div class="form-group row">
+                            
+                            <input type="email" class="form-control" 
+                                name="email" id="email" 
+                                autofocus placeholder="E-mail">
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

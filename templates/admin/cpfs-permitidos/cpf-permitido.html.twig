@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% if not cpfPermitido.id %} Novo {% endif %} CPF Permitido {% endblock %}
+
+{% set menu = {
+'Voltar': {'href': path('admin-cpfs', {'page': app.request.query.get('page')}), 'title': 'Voltar a pesquisa de Cpfs Permitidos', 'icon': 'arrow-left'},
+} %}
+{% if cpfPermitido.id %}
+    {% set menu = menu|merge({
+        'Editar': {'href': "javascript: toogleDiv('div_form', 'cpfs_permitidos_cpf');", 'title': 'Edite as informações deste CPF', 'icon': 'pencil'},
+    }) %}
+    {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS') %}
+        {% set menu = menu|merge({
+            'Excluir': {'href': "javascript: ", 'title': 'Exclua este CPF', 'onclick': "confirmUrl('" ~ path('admin-cpfs-excluir', {'id': cpfPermitido.id}) ~ "', 'Você confirma a exclusão do CPF?')", 'icon': 'times'},
+        }) %}
+    {% endif %}
+{% endif %}
+
+{% block body %}
+<div id="div_form" class="{{ cpfPermitido.id?(form.vars.valid?'d-none':''):'' }}">
+    {% if cpfPermitido.id %}
+        <!--
+    <div class="well well-sm">
+        Edite as informações do CPF...
+        <a class="btn btn-warning btn-sm" href="javascript: " onclick="toogleDiv('div_form');"><i class="fa fa-ban"></i> Cancelar Edição</a>
+    </div>
+    {% endif %} 
+    <!-- Campos fora do form 
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="atendimento" class="required control-label col-sm-2"> <?php echo $atendimento_id?('Atendimento'):($processo_id?'Processo':'');?></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">
+                    <b><?php echo $atendimento_id?($this->tarefa->atendimento()->view('numero')):($processo_id?$this->tarefa->processo()->view('numero_numero_alternativo'):'<span class="text-primary"><i class="fa fa-exclamation-triangle"></i> Sem Atendimento ou Processo</span>');?></b>
+                </p>
+            </div>
+        </div>
+    </div> 
+    <!-- / Campos fora do form-->
+    {{ include('_helpers/form_horizontal.html.twig', {'form': form, 'submit_label': 'Salvar'}, with_context = false) }}
+</div>
+
+{% if cpfPermitido.id %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row display">
+                <div class="col-md-12">
+                    <div class="row lead">
+                        <div class="col-md-12"> CPF: <b>{{ cpfPermitido.cpfFormatado }} </b> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock body %}
+        

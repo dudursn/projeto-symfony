@@ -1,0 +1,169 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gray-900 sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ path('index') }}">
+        <div class="sidebar-brand-icon">
+            
+        </div>
+        <div class="sidebar-brand-text mx-3">
+            <img src="{{ asset('img/logo_vermelha.png') }}" style="height: 20px;"/>
+        </div>
+    </a>
+        
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    
+    <!-------------------------------------------------------------------------------------------------   ADMIN NAV   -->
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item {{ app.request.get('_route') == 'index'?'active':'' }}">
+            <a class="nav-link" href="{{ path('index') }}">
+                <i class="fas fa-fw fa-home"></i>
+                <span> Página Inicial </span>
+            </a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item {{ app.request.get('_route') == 'index'?'active':'' }}">
+            <a class="nav-link" href="{{ path('index') }}">
+                <i class="fas fa-fw fa-check"></i>
+                <span>Votos </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('admin-eleicoes') }}">
+                <i class="fas fa-fw fa-trophy"></i>
+                <span>Eleições</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('admin-usuarios') }}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Usuários</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('admin-candidatos') }}">
+                <i class="fas fa-fw fa-award"></i>
+                <span>Candidatos</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('admin-logins') }}">
+                <i class="fas fa-fw fa-user-circle"></i>
+                <span>Logins</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_login') }}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Registrar Usuário</span>
+            </a>
+        </li>
+    {% endif %}
+    <!-----------------------------------------------------------------------------------------------   / ADMIN NAV   -->
+    <!-----------------------------------------------------------------------------------------------   USUÁRIO NAV   -->
+    {% if is_granted('ROLE_USUARIO') %}
+        <li class="nav-item {{ app.request.get('_route') == 'index'?'active':'' }}">
+            <a class="nav-link" href="{{ path('index') }}">
+                <i class="fas fa-fw fa-home"></i>
+                <span> Página Inicial </span>
+            </a>
+        </li>
+        <hr class="sidebar-divider">
+        {% if eleicoesMapper.eleicaoAtual  %}
+            <div class="sidebar-heading">
+                Eleição de {{ eleicoesMapper.eleicaoAtual.ano }}
+            </div>
+            <li class="nav-item {{ app.request.get('_route') == 'votos'?'active':'' }}">
+                <a class="nav-link" href="{{ path('votos') }}">
+                    <i class="fas fa-fw fa-check"></i>
+                    <span>Meus Votos</span>
+                </a>
+            </li>
+            {#
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin-candidatos') }}">
+                    <i class="fas fa-fw fa-award"></i>
+                    <span>Candidatos</span>
+                </a>
+            </li>
+            #}
+            <hr class="sidebar-divider my-0">
+        {% endif %}
+        <!--
+        <li class="nav-item {{ app.request.get('_route') == 'votos'?'active':'' }}">
+            <a class="nav-link" href="{{ path('votos') }}">
+                <i class="fas fa-fw fa-check"></i>
+                <span>Registro de Votos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('admin-eleicoes') }}">
+                <i class="fas fa-fw fa-trophy"></i>
+                <span>Eleições Anteriores</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider my-0">
+        -->
+        <li class="nav-item">
+            <a class="nav-link" href="#{#{{ path('admin-usuarios') }}#}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Meus Dados</span>
+            </a>
+        </li>
+        {#
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_login') }}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Acessar o Sistema</span>
+            </a>
+        </li>
+        #}
+    {% endif %}
+    <!---------------------------------------------------------------------------------------------   / USUÁRIO NAV   -->
+    
+    <hr class="sidebar-divider">
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+    
+    <!-- Nav Item -->
+    <!--
+    <li class="nav-item active">
+        <a class="nav-link" href="{{ path('index') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    -->
+
+    <!-- Nav Heading -->
+    <!--
+    <div class="sidebar-heading">
+        Interface
+    </div>
+    -->
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <!--
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Components</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="buttons.html">Buttons</a>
+                <a class="collapse-item" href="cards.html">Cards</a>
+            </div>
+        </div>
+    </li>
+    --> 
+</ul>
+<!-- End of Sidebar -->

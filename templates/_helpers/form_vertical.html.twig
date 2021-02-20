@@ -1,0 +1,9 @@
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="form-group">
+        <button type="submit" class="btn {{ submit_class|default('btn-primary') }} {{ submit_block is defined? (submit_block? 'btn-block' : '') : 'btn-block' }}">
+            <i class="fa {{ submit_icon|default('fa-check') }}"></i> {{ submit_label|default('Salvar') }}
+        </button>
+    </div>
+{{ form_end(form) }}

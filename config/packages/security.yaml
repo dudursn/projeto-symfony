@@ -1,0 +1,49 @@
+security:
+    encoders:
+        App\Entity\Logins:
+            algorithm: auto
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: 'App\Entity\Logins'
+                property: 'email'
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: lazy
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000       # 30 days in seconds
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Se "path" for "^/login$", com o $, ele libera apenas /login, sem liberar as páginas dentro de /login (ex. /login/alguma-coisa)
+        - { path: ^/registro, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Se "path" for "^/login$", com o $, ele libera apenas /login, sem liberar as páginas dentro de /login (ex. /login/alguma-coisa)
+        - { path: ^/recuperacao, roles: IS_AUTHENTICATED_ANONYMOUSLY } #Form: é para página de nova senha
+        - { path: ^/recupera_senha, roles: IS_AUTHENTICATED_ANONYMOUSLY } #Post: enviar o email com o link para nova senha
+        #- { path: ^/acesso, roles: IS_AUTHENTICATED_FULLY } # Editar: é na página de editar senha, na real!
+        - { path: ^/admin, roles: [ROLE_ADMIN] }
+        - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
+        # - { path: ^/acesso, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/profile, roles: ROLE_USER }
+

@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% if not eleicao.id %} Nova {% endif %} Eleição {% endblock %}
+
+{% set menu = {
+'Voltar': {'href': path('admin-eleicoes', {'page': app.request.query.get('page')}), 'title': 'Voltar a pesquisa de Eleição', 'icon': 'arrow-left'},
+} %}
+{% if eleicao.id %}
+    {% set menu = menu|merge({
+        'Editar': {'href': "javascript: toogleDiv('div_form', 'eleicoes_email');", 'title': 'Edite as informações desta Eleição', 'icon': 'pencil'},
+    }) %}
+    {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS') %}
+        {% set menu = menu|merge({
+            'Excluir': {'href': "javascript: ", 'title': 'Exclua esta Eleição', 'onclick': "confirmUrl('" ~ path('admin-eleicoes-excluir', {'id': eleicao.id}) ~ "', 'Você confirma a exclusão da Eleição?')", 'icon': 'times'},
+        }) %}
+    {% endif %}
+{% endif %}
+
+{% block body %}
+    <div id="div_form" class="{{ eleicao.id?(form.vars.valid?'d-none':''):'' }}">
+        {% if eleicao.id %}
+            <!--
+        <div class="well well-sm">
+            Edite as informações da Eleição...
+            <a class="btn btn-warning btn-sm" href="javascript: " onclick="toogleDiv('div_form');"><i class="fa fa-ban"></i> Cancelar Edição</a>
+        </div>
+        {% endif %} 
+        <!-- Campos fora do form 
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="atendimento" class="required control-label col-sm-2"> <?php echo $atendimento_id?('Atendimento'):($processo_id?'Processo':'');?></label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">
+                        <b><?php echo $atendimento_id?($this->tarefa->atendimento()->view('numero')):($processo_id?$this->tarefa->processo()->view('numero_numero_alternativo'):'<span class="text-primary"><i class="fa fa-exclamation-triangle"></i> Sem Atendimento ou Processo</span>');?></b>
+                    </p>
+                </div>
+            </div>
+        </div> 
+        <!-- / Campos fora do form-->
+        {{ include('_helpers/form_horizontal.html.twig', {'form': form, 'submit_label': 'Salvar'}, with_context = false) }}
+    </div>
+
+    {% if eleicao.id %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row display">
+                    <div class="col-md-12">
+                        <div class="row lead">
+                            <div class="col-md-12"> Ano: <b>{{ eleicao.ano }}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"> Descrição: <b>{{ eleicao.descricao }}</b></div>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-md-6"> Período de Votação: <b>{{ eleicao.view('votacao_inicio') }} - {{ eleicao.view('votacao_fim') }}</b></div>
+                            <div class="col-md-4"> Apuração: <b>{{ eleicao.view('apuracao_data') }}</b></div>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-md-4"> Votação Habilitada: <b>{% if eleicao.ativo %} <span class="badge badge-success">Habilitado</span> {% else %} <span class="badge badge-dark">Desabilitado</span> {% endif %}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <small class="text-muted">
+                                    Criado em: <b><span class="text-muted">{{ eleicao.view('criacao') }}</span></b> 
+                                    por <b><span class="text-muted">{{ eleicao.criador.nome|default('') }}</span></b>
+                                        {% if eleicao.editor %}
+                                        <br/>
+                                        Editado em <b><span class="text-muted">{{ eleicao.view('edicao') }}</span></b>
+                                        por <b><span class="text-muted">{{ eleicao.editor.nome }}</span></b>
+                                        {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% if eleicao.candidatos is iterable %}
+                    <div class="table-responsive"><table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Candidato</th><th>Número</th><th>Usuário</th>
+                                    <th>
+                                        Votos ({{ eleicao.votosQtd }})
+                                    </th>
+                                    <th class="text-right">
+                                        <a class="btn btn-secondary" href="{{ path('admin-candidatos-candidato', {eleicao: eleicao.id, url: (app.request.uri|url_encode) }) }}" title="Adicione um Candidato a esta Eleição"><i class="fa fa-plus"> Novo Candidato</i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in eleicao.candidatos %} 
+                                    <tr>
+                                        <td class="link">
+                                            <a href="{{ path('admin-candidatos-candidato', {'id': item.id}) }}" title="Acesse página do Candidato">
+                                                <strong class="text-primary"> {{ item.apelido }}</strong> <br/>
+                                                <strong>{{ item.view('mandato_nome') }}</strong>
+                                            </a>
+                                        </td>
+                                        <td class="link">
+                                            <a href="{{ path('admin-candidatos-candidato', {'id': item.id}) }}" title="Acesse página do Candidato">
+                                                {{ item.numero }}
+                                            </a>
+                                        </td>
+                                        <td class="link">
+                                            <a href="{{ path('admin-candidatos-candidato', {'id': item.id}) }}" title="Acesse página do Candidato">
+                                                {{ item.usuario.nome }}
+                                            </a>
+                                        </td>
+                                        <td class="link">
+                                            <a href="{{ path('admin-candidatos-candidato', {'id': item.id}) }}" title="Acesse página do Candidato">
+                                                {{ item.votosQtd }}
+                                            </a>
+                                        </td>
+                                        <td class="actions">
+                                            
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table></div>
+                    {% else %}
+                    <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% if eleicao.votos is iterable %}
+                <div class="table-responsive"><table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Votos ({{ eleicao.votosQtd }})</th><th></th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in eleicao.votos %}
+                        <tr>
+                            <td class="link">
+                                <a href="#{#{{ path('index', {'id': item.id}) }}#}" title="Acesse página do Voto">
+                                    {{ item.view('criacao') }}
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="#{#{{ path('index', {'id': item.id}) }}#}" title="Acesse página do Voto">
+                                    {{ item.usuario.nome }}
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="#{#{{ path('index', {'id': item.id}) }}#}" title="Acesse página do Voto">
+                                    {{ item.candidato.apelido }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table></div>
+                {% else %}
+                <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock body %}
+

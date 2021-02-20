@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for=""></label>
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-check"></i> {{ submit_label|default('Salvar') }}
+            </button>
+        </div>
+    </div>
+{{ form_end(form) }}

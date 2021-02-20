@@ -1,0 +1,61 @@
+<div class="rtlUploader" 
+    data-endpoint="{{ endpoint }}" 
+    {% if id is defined %}
+        id="{{ id }}" 
+    {% endif %}
+    {% if session_endpoint is defined %}
+        data-session-endpoint="{{ session_endpoint }}" 
+    {% endif %}
+    {% if delete_endpoint is defined %}
+        data-delete-endpoint="{{ delete_endpoint }}" 
+    {% endif %}
+    {% if template is defined %}
+        data-template="{{ template }}" 
+    {% endif %}
+    {% if auto_upload is defined %}
+        data-auto-upload="{{ auto_upload }}" 
+    {% endif %}
+    {% if drop_zones is defined %}
+        data-drop-zones="{{ drop_zones }}" 
+    {% endif %}
+    {% if paste_area is defined %}
+        data-paste-area="{{ paste_area }}"  
+    {% endif %}
+    {% if paste_name is defined %}
+        data-paste-name="{{ paste_name }}"  
+    {% endif %}
+    {% if limit is defined %}
+        data-limit="{{ limit }}"  
+    {% endif %}
+    {% if limit_min is defined %}
+        data-limit-min="{{ limit_min }}"  
+    {% endif %}
+    {% if form is defined %}
+        data-form="{{ form }}" 
+    {% endif %}
+    {% if form_class is defined %}
+        data-form-class="{{ form_class }}" 
+    {% endif %}
+    {% if form_parent_loop is defined %}
+        data-form-parent-loop="{{ form_parent_loop }}" 
+    {% endif %}
+    {% if on_upload_refresh is defined %}
+        data-on-upload-refresh="{{ on_upload_refresh }}" 
+    {% endif %}
+    {% if on_upload_url is defined %}
+        data-on-upload-url="{{ on_upload_url }}" 
+    {% endif %}
+    data-thumb-waiting-path="{{ thumb_waiting_path|default(asset('img/icons/waiting_generic.png')) }}" 
+    data-thumb-not-available-path="{{ thumb_not_available_path|default(asset('img/icons/file_generic.png')) }}" 
+    {% if delete_force_confirm is defined %}
+        data-delete-force-confirm="{{ delete_force_confirm }}" 
+    {% endif %}
+    {% if drop_area_text is defined %}
+        data-drop-area-text="{{ drop_area_text }}" 
+    {% endif %}
+    >
+</div>
+
+{% set template = template is defined?template:'default' %}
+    
+{{ include('_helpers/uploader-template.html.twig', {template: template}, with_context = false) }} 

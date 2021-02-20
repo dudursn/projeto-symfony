@@ -1,0 +1,51 @@
+<!-- USO NAS VIEWS: ESTÁ NO DEFAULT -> INDEX -> INDEX
+
+label: Texto que aparecerá no menu;
+href: link destino ao clicar na opção;
+title: Texto alternativo que aparece quando passar o mouse por cima do "Label";
+icon: icone para ser adicionado no menu (apenas o final do nome da classe - FONT AWESOME!!!);
+onclick: codigo javascript acionado ao clicar;
+target: atributo target do <a>. Ex.: "_blank";
+class: classes adicionais aplicados a tag a da opção no menu;
+o: array com outros links para criar um menu suspenso na opção;
+divider: para criar uma barra divisória no dropdown;
+header: um texto divisório dentro do dropdown;
+-->
+
+{% macro leftMenu(menu, nivel = 0) %}
+    {% set nivel = nivel + 1 %}
+    <ul class="{{ nivel == 1?'nav navbar-nav':'dropdown-menu' }}">
+        {% for label,item in menu %}
+            {% set href = item['href'] is defined?item['href']:'#' %}
+            {% set title = item['title'] is defined?item['title']:'' %}
+            {% set icon = item['icon'] is defined?'<i class="fa fa-fw fa-' ~ item['icon'] ~ '"></i> ':'' %}
+            {% set onclick = item['onclick'] is defined?item['onclick']:'' %}
+            {% set target = item['target'] is defined?item['target']:'' %}
+            {% set class = item['class'] is defined?item['class']:'' %}
+            {% set divider = item['divider'] is defined and item['divider'] == 1?true:false %}
+            {% set header = item['header'] is defined and item['header'] == 1?true:false %}
+            {% set caret = item['o'] is defined?' <span class="caret"></span>':'' %}
+            {% set li_class = caret?'dropdown':'' %}
+            {% set a_dropdown = caret?' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"':'' %}
+            
+            {% if nivel != 1 and divider %}
+                <li role="separator" class="divider"></li>
+            {% elseif nivel != 1 and header %}
+                <li class="dropdown-header">{{ icon|raw }} {{ label|raw }} </li>
+            {% else %}
+                <li class="nav-item {{ li_class|raw }}">
+                    <a class="nav-link {{ class }}" title="{{ title }}" href="{{ href }}" onclick="{{ onclick|raw }}" target="{{ target|raw }}" {{ a_dropdown|raw }}>{{ icon|raw }} {{ label }} {{ caret|raw }}</a>
+                    {% if caret %}                        
+                        {% import _self as macros %}
+                        {{ macros.leftMenu(item['o'], nivel) }}
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% if menu is defined %}
+    {% import _self as macros %}
+    {{ macros.leftMenu(menu) }}
+{% endif %}

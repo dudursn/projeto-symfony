@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bem-vindo à Plataforma de Votação do SindSaúde GO!{% endblock %}
+
+{#
+{% set menu = {
+'Processos': {'href': path('index'), 'title': 'Volte para a pesquisa de processos', 'icon': 'arrow-left'},
+'Editar': {'href': 'javascript: ', 'title': 'Edite as informações deste processo', 'icon': 'pencil', 'onclick': "toogleDiv('div1', 'numero')"},
+'Fichas': {'href': 'javascript: ', 'title': 'Gerar fichas em PDF para o Processo', 'icon': 'file-text'},
+} %}
+#}
+
+{% block body %}
+    {% if eleicoesMapper.eleicaoAtual %}
+        <h3 class="text-primary">Eleições de {{ eleicoesMapper.eleicaoAtual.ano }}</h3>
+        <h5 class="text-muted">{{ eleicoesMapper.eleicaoAtual.descricao }}</h5>
+        {% if periodoDeVotacaoMsg == 1 %}
+            <p class="text-muted">Período de votação: {{ eleicoesMapper.eleicaoAtual.view('votacao_inicio') }} à {{ eleicoesMapper.eleicaoAtual.view('votacao_fim') }} </p>
+        {% elseif periodoDeVotacaoMsg == 2 %}
+            <p class="text-primary">O período de votação inicia em {{ eleicoesMapper.eleicaoAtual.view('votacao_inicio') }} e vai até {{ eleicoesMapper.eleicaoAtual.view('votacao_fim') }}. <strong>Agende-se</strong> </p>
+        {% elseif periodoDeVotacaoMsg == 3 %}
+            <p class="text-danger"><i class="fa fa-exclamation-triangle"></i> Período de votação encerrado desde {{ eleicoesMapper.eleicaoAtual.view('votacao_fim') }} </p>
+        {% endif %}
+        
+        {% if jaVotou %}
+            <div class="alert alert-success">Você já votou nessa eleição</div>
+        {% elseif eleicoesMapper.eleicaoAtual.candidatos is iterable %}
+            <div class="row">
+                {% for item in eleicoesMapper.eleicaoAtual.candidatos %} 
+                    <div class="card mx-3" style="width: 300px;">
+                        <img src="{{ asset('img/candidatos/candidato' ~ item.id ~ '.jpg') }}" class="card-img-top" alt="{{ item.apelido }}">
+                        <div class="card-body">
+                            <h5 class="card-title"><span class="text-primary">{{ item.apelido }}</span></h5>
+                            <h6 class="card-title">{{ item.view('mandato_nome') }} - #{{ item.numero }}</h6>
+                            <p class="card-text"><small>{{ item.view('info_br') }}</small></p>
+                        </div>
+                        <div class="card-footer">
+                            {#{% if periodoDeVotacaoMsg == 1 %}#}
+                                <a href="{{ path('votos-voto', {eleicao: eleicoesMapper.eleicaoAtual.id, candidato: item.id}) }}" class="btn btn-success btn-block"><i class="fa fa-fw fa-check"></i> Votar</a>
+                            {#{% endif %}}#}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% else %}
+        <h5 class="text-muted">Não há eleições no momento...</h5>
+    {% endif %}
+{% endblock %}

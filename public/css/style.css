@@ -1,0 +1,334 @@
+/**********************************************   SINDSAUDEGO   ***********************************************************/
+/* AJUSTES NO BOOTSTRAP */
+body {
+    color: #111;
+}
+caption {
+    caption-side: top;
+}
+.col-form-label {
+    text-align: right;
+}
+.bg-login-image {
+    background:url(../img/bg-login-image.jpeg);
+    background-position: center;
+    background-size: cover;
+}
+/* Dropdowns com HOVER */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; /* remove the gap so it doesn't close */
+ }
+.page-header {
+    margin-top: 25px;
+}
+.breadcrumb > li + li::before {
+    color: #666;
+    content: "> ";
+}
+
+/* Alerts com icones contextuais */
+.alert.alert-success {background: url(../img/alert_success.png) no-repeat 15px 17px #dff0d8; padding-left: 45px;}
+.alert.alert-warning {background: url(../img/alert_warning.png) no-repeat 15px 16px #fcf8e3; padding-left: 45px;}
+.alert.alert-danger {background: url(../img/alert_danger.png) no-repeat 15px 16px #f2dede; padding-left: 45px;}
+.alert.alert-info {background: url(../img/alert_info.png) no-repeat 15px 16px #d9edf7; padding-left: 45px;}
+.alert .alert-title {font-weight: bold; font-size: 15px;}
+.alert p {padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #CCCCCC;}
+.alert p:last-child {padding-bottom: 0px; margin-bottom: 0px; border-bottom: none;}
+/* Alerts com icones contextuais */
+/* ESPAÇAMENTO NOS FORMS INLINE */
+.form-inline {
+    margin-bottom: 15px;
+}
+.form-inline .form-group {
+    margin: 0 5px 10px 0;
+}
+.form-inline .radio {
+    margin-right: 5px;
+}
+.form-inline .radio:last-child {
+    margin-right: 0px;
+}
+/* fim de ESPAÇAMENTO NOS FORMS INLINE */
+
+/* AJUSTES NO SB-ADMIM-2 */
+/* Adição do Top Nav Links a Esquerda*/
+.navbar-default .navbar-top-links-left {
+    margin-left: 0px;
+}
+.navbar-default .navbar-top-links-left > li > a {
+    color: #337ab7;
+}
+.navbar-default .navbar-top-links-left > li > a:hover {
+    background-color: #eee;
+    color: #23527c;
+}
+/* Fim de AJUSTES NO SB-ADMIM-2 */
+
+/* FORMS COM O Twiter_Bootstrap3 */
+.form-vertical label + .radio,
+.form-vertical label + .checkbox {
+    margin-top: 0;
+}
+.form-vertical label + .form-control-static {
+    padding-top: 0;
+}
+.form-vertical .form-control-static:last-child {
+    padding-bottom: 0;
+}
+input[type=range]:after {
+    padding-left: 0.5em;
+    content: attr(data-value);
+}
+/** file upload button **/
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+/* Fim de FORMS COM O Twiter_Bootstrap3 */
+
+/* TEMA */
+/* RESET DE MARGENS e PADDINGS */
+.no-margin {margin: 0px !important;}
+.no-margin-top {margin-top: 0px !important;}
+.no-margin-right {margin-right: 0px !important;}
+.no-margin-bottom {margin-bottom: 0px !important;}
+.no-margin-left {margin-left: 0px !important;}
+.no-margin-vertical {margin-top: 0px !important; margin-bottom: 0px !important;}
+.no-margin-horizontal {margin-right: 0px !important; margin-left: 0px !important;}
+
+.no-padding {padding: 0px !important;}
+.no-padding-top {padding-top: 0px !important;}
+.no-padding-right {padding-right: 0px !important;}
+.no-padding-bottom {padding-bottom: 0px !important;}
+.no-padding-left {padding-left: 0px !important;}
+.no-padding-vertical {padding-top: 0px !important; padding-bottom: 0px !important;}
+.no-padding-horizontal {padding-right: 0px !important; padding-left: 0px !important;}
+/* fim de RESET DE MARGENS e PADDINGS */
+/* Área de Login */
+.login-body {
+    background-color: #d9e0e7;
+    background-image: url("../img/login-bg.jpg");
+    height: 500px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.login-header {margin-top:20%; height: 50px; padding: 15px 0px; background-color: #FFF;}
+.login-header-logo {float: left; padding-bottom: 15px;  }
+.login-header-logo a img {max-height: 32px; max-width: 250px;}
+.login-body-body {padding-bottom: 20px; background: #2d353c none repeat scroll 0 0 !important; color: #fff;}
+.login-body-body .page-header {color: #FFF; border: 0; margin-bottom: 5px;}
+.login-body-body label {color: #FFF;}
+.login-footer {height: 50px; padding: 20px 0px 40px;}
+.login-footer-info {text-align: center;}
+/* Fim de Área de Login */
+
+/* NAVBAR */
+.navbar.navbar-default.navbar-static-top {/*background-color: #066C93;*/}
+.navbar.navbar-default.navbar-static-top .navbar-brand {
+    padding: 5px;
+    width: 250px;
+}
+.navbar.navbar-default.navbar-static-top .navbar-brand img {
+    max-height: 40px; 
+    max-width: 230px;
+}
+/* /NAVBAR */
+/* FOOTER */
+#footer-wrapper {
+    border-top: 1px solid #e7e7e7;
+    margin: 0px 0 0 250px;
+    padding: 20px;
+    position: inherit;
+    text-align: right;
+}
+@media (max-width:768px){#footer-wrapper {margin: 0; text-align: center;}}
+#footer-wrapper .logo img {max-height: 32px;}
+#footer-wrapper .logo p {font-size: 80%;}
+/* /FOOTER */
+
+/* Sidebar */
+.sidebar .nav > li.nav-userarea {
+    /*background: #1a2229 none repeat scroll 0 0;*/
+    /*color: #fff;*/
+    background: #eee none repeat scroll 0 0;
+    color: #337ab7;
+    padding: 10px 20px 5px;
+}
+.sidebar .nav > li.nav-userarea .imagem {
+    border-radius: 20%;
+    float: left;
+    height: 25px;
+    margin-right: 10px;
+    margin-top: 2px;
+    overflow: hidden;
+    width: 25px;
+}
+.sidebar .nav > li.nav-userarea .imagem-a {
+    padding: 0;
+}
+.sidebar .nav > li.nav-userarea .imagem img {
+    max-height: 100%;
+    max-width: 100%;
+}
+.sidebar .nav > li.nav-userarea .info {
+    margin-left: 35px;
+    font-size: 12px;
+    padding-bottom: 10px;
+}
+.sidebar .nav > li.nav-userarea .info small {
+    color: #889097;
+    display: block;
+}
+/*Fim de Sidebar*/
+/*Tabelas*/
+table th {color: #000; background-color: #ddd; padding-top: 12px !important; padding-bottom: 12px !important;}
+table thead th:first-child {border-radius:5px 0px 0px 0px;-moz-border-radius:5px 0px 0px 0px;-webkit-border-radius:5px 0px 0px 0px;}
+table thead th:last-child {border-radius:0px 5px 0px 0px;-moz-border-radius:0px 5px 0px 0px;-webkit-border-radius:0px 5px 0px 0px;}
+table tfoot td {text-align: center; color: #000; background-color: #ddd; border-radius:0px 0px 5px 5px;-moz-border-radius:0px 0px 5px 5px;-webkit-border-radius:0px 0px 5px 5px;}
+table tfoot td .pagination {margin: 5px auto;}
+table td {vertical-align: middle !important;}
+table td.link {padding: 0px !important;}
+table td.link a {margin: 0; padding: 8px; display: block; height: 100%; color: #333;}
+table td.link a:hover {color: #000;}
+table td.actions {text-align: right;}
+table td.actions a.btn {border-radius: 3px; font-size: 14px; line-height: 1.5; padding: 3px 8px;}
+table .no-wrap {white-space: nowrap;}
+table .table-no-hover {pointer-events: none;}
+/* Table com Scroll no tbody*/
+table.table-scroll {}
+table.table-scroll tbody, table.table-scroll thead { display: block; }
+table.table-scroll tbody {max-height: 560px; width: 100%; overflow-y: auto; overflow-x: hidden;}
+/*
+table.simple-table caption {color: #555; font-size: 12px; text-align: left; padding: 10px 0px 5px;}
+table.simple-table th {background-color: transparent; color: inherit; font-size: 12px; padding: 0px;}
+table.simple-table tbody tr {background-color: transparent; border-bottom: 1px solid #b3b3b3;}
+table.simple-table tbody tr:hover {background-color: #e6e6e6;}
+table.simple-table tbody tr.noborder {border: 0;}
+table.simple-table thead th.center, table.simple-table tbody tr.center {text-align: center;}
+table .center {text-align: center !important;}
+
+table.complex-table caption {padding: 10px 0px 15px;}
+table.complex-table .gap {height: 15px;}
+table.complex-table tr.titulo {border-top: 2px solid; margin-top: 15px;}
+table.complex-table tr.titulo td {font-size: 14px; font-weight: bold; padding: 15px 10px;}
+*/
+/*Fim de Tabelas*/
+
+/* Table com Scroll no tbody*/
+ul.table-scroll {display: block; max-height: 560px; width: 100%; overflow-y: auto; overflow-x: hidden;}
+
+/*
+
+/* Display */
+.display {}
+.display div.row {margin-bottom: 12px;}
+.display div b {display: inline-block; padding: 3px 5px; color: #000; background-color: #F0F0F0; border-radius: 3px;-moz-border-radius:3px;-webkit-border-radius:3px;}
+.display div b:empty {display: none;}
+.display div b.textarea {padding: 8px;}
+.display div span.lead {font-size: 18px;}
+.display .img {float: left; width: 240px; height: 200px; padding: 5px; margin: 0px 10px 10px 0px; text-align: center; border: 2px solid #015EA9; border-radius: 10px; -moz-border-radius:10px; -webkit-border-radius:10px;}
+.display .img img {max-width: 240px; max-height: 200px;}
+/* Fim Display */
+
+/* FORMS */
+.form-inline select {
+    max-width: 180px;
+}
+.form-horizontal select.rtlSelectMultLevel, .form-vertical select.rtlSelectMultLevel {
+    margin: 0px 10px 10px 0px;
+}
+.form-inline select.rtlSelectMultLevel {
+    margin: 0px 10px 0px 0px;
+}
+/*select.rtlSelectMultLevel:last-child {margin: 0px;}*/
+/*form-inline select.rtlSelectMultLevel:last-child {margin: 10px !important;}*/
+.zend_form dd {margin-bottom: 15px;}
+
+/* / FORMS */
+
+/* Estilo do Componente RtlMultiSelect */
+.rtlMultiSelectArea {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    margin-right: 10px;
+}
+.rtlMultiSelectArea:last-child {
+    margin-right: 0px;
+}
+.rtlMultiSelectAreaNivel {
+    padding-bottom: 0px !important;
+}
+.rtlMultiSelectAreaNivel.form-control .rtlMultiSelectArea {
+    margin-bottom: 6px;
+}
+.rtlMultiSelectAreaNivel.form-inline {
+    margin-bottom: 0px;
+}
+.rtlMultiSelectSelecionadosArea {
+    width: 100%;
+}
+.rtlMultiSelectSelecionados a {
+    margin: 0px 5px 5px 0px;
+}
+.rtlMultiSelectSelecionados a:last-child {
+    margin: 0px 0px 5px 0px;
+}
+.rtlMultiSelectSelecionadosArea input {
+    /* border: 0; */
+    /* box-shadow: none; */
+}
+.rtlMultiSelectNivelValue {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.rtlMultiSelectNivelValue .fa {
+    margin-left: 5px;
+}
+.rtlMultiSelectLista {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 9999;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  /* overflow-y: auto; */
+}
+.rtlMultiSelectItem {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.rtlMultiSelectItem:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.rtlMultiSelectItemFocado {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+/* / Estilo do Componente RtlMultiSelect */

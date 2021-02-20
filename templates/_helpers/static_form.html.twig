@@ -1,0 +1,56 @@
+{#
+    TEM QUE PASSAR A VARIÁVEL "rows". rows pode ser:
+    1. String: coloca a string no form-control-static deixando o label vazio
+    2. Array Associativo: Key é o Label e o valor vai para o form-control-static
+        Ex.: {{ include('_helpers/static_form.html.twig', {'rows': {'Pessoa': 'Renan'}, {'Processo': '20/2019'}}) }}
+    3. Array NÃO Associativo: Um array com vários arrays associativos no padrão {label: 'Texto para o Label', 'value': 'Texto para o form-control-static"}
+        Ex.: {{ include('_helpers/static_form.html.twig', {'rows': [{'label': 'Atendimento', 'value': '2'}, {'label': 'Processo', 'value': '3'}, {'label': 'Pessoa', 'value': 'Renan'}]}) }}
+#}
+{% if rows %}
+<div class="form-horizontal">
+    {% if rows is iterable %}
+        {% for key, row in rows %}
+            {# Match integer #}
+            {% if key matches '/^\\d+$/' %}
+                <div class="form-group">
+                    <label for="{{ row.label }}" class="control-label col-sm-2"> {{ row.label|raw }} </label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">
+                            <b>{{ row.value|raw }}</b>
+                        </p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <label for="{{ key }}" class="control-label col-sm-2"> {{ key|raw }} </label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">
+                            <b>{{ row|raw }}</b>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+    <div class="form-group">
+        <label for="" class="control-label col-sm-2"> &nbsp; </label>
+        <div class="col-sm-10">
+            <p class="form-control-static">
+                <b>{{ rows|raw }}</b>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!--
+    <div class="form-group">
+        <label for="atendimento" class="required control-label col-sm-2"> Atendimento </label>
+        <div class="col-sm-10">
+            <p class="form-control-static">
+                <b>Numero do Atendimento</b>
+            </p>
+        </div>
+    </div>
+    -->
+</div>
+{% endif %}

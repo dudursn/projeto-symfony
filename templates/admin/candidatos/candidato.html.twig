@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% if not candidato.id %} Novo {% endif %} Candidato {% endblock %}
+
+{% if url %}
+    {% set menu = {
+        'Voltar': {'href': url, 'title': '', 'icon': 'arrow-left'},
+    } %}
+{% else %}
+    {% set menu = {
+        'Voltar': {'href': path('admin-candidatos', {'page': app.request.query.get('page')}), 'title': 'Voltar a pesquisa de Candidato', 'icon': 'arrow-left'},
+    } %}
+{% endif %}
+{% if candidato.id %}
+    {% set menu = menu|merge({
+        'Editar': {'href': "javascript: toogleDiv('div_form', 'candidatos_email');", 'title': 'Edite as informações deste Candidato', 'icon': 'pencil'},
+    }) %}
+    {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS') %}
+        {% set menu = menu|merge({
+            'Excluir': {'href': "javascript: ", 'title': 'Exclua este Candidato', 'onclick': "confirmUrl('" ~ path('admin-candidatos-excluir', {'id': candidato.id}) ~ "', 'Você confirma a exclusão do Candidato?')", 'icon': 'times'},
+        }) %}
+    {% endif %}
+{% endif %}
+
+{% block body %}
+    
+<div id="div_form" class="{{ candidato.id?(form.vars.valid?'d-none':''):'' }}">
+    {% if candidato.id %}
+        <!--
+    <div class="well well-sm">
+        Edite as informações do Candidato...
+        <a class="btn btn-warning btn-sm" href="javascript: " onclick="toogleDiv('div_form');"><i class="fa fa-ban"></i> Cancelar Edição</a>
+    </div>
+    {% endif %} 
+    <!-- Campos fora do form 
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="atendimento" class="required control-label col-sm-2"> <?php echo $atendimento_id?('Atendimento'):($processo_id?'Processo':'');?></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">
+                    <b><?php echo $atendimento_id?($this->tarefa->atendimento()->view('numero')):($processo_id?$this->tarefa->processo()->view('numero_numero_alternativo'):'<span class="text-primary"><i class="fa fa-exclamation-triangle"></i> Sem Atendimento ou Processo</span>');?></b>
+                </p>
+            </div>
+        </div>
+    </div> 
+    <!-- / Campos fora do form-->
+    {{ include('_helpers/form_horizontal.html.twig', {'form': form, 'submit_label': 'Salvar'}, with_context = false) }}
+</div>
+
+{% if candidato.id %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row display">
+                <div class="col-md-12">
+                    <div class="row"> 
+                        <div class="col-md-12"> Eleição: <b><a href="{{ path('admin-eleicoes-eleicao', {id: candidato.eleicao.id}) }}">{{ candidato.eleicao.ano }}</a></b></div>
+                    </div>
+                    
+                    <div class="row lead"> 
+                        <div class="col-md-4"> Apelido: <b>{{ candidato.apelido }}</b></div>
+                        <div class="col-md-4"> Número: <b>{{ candidato.numero }}</b></div>
+                        <div class="col-md-4"> Mandato: <b>{{ candidato.view('mandato_nome') }}</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12"> Info.:<br/> <b>{{ candidato.view('info_br') }}</b></div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-4"> Usuário: <b><a href="{{ path('admin-usuarios-usuario', {id: candidato.usuario.id}) }}" target="_blank">{{ candidato.usuario.nome }}</a></b></div>
+                        <div class="col-md-4"> CPF: <b>{{ candidato.usuario.view('doc') }}</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <small class="text-muted">
+                                Criado em: <b><span class="text-muted">{{ candidato.view('criacao') }}</span></b> 
+                                por <b><span class="text-muted">{{ candidato.criador.nome|default('') }}</span></b>
+                                {% if candidato.editor %}
+                                    <br/>
+                                    Editado em <b><span class="text-muted">{{ candidato.view('edicao') }}</span></b>
+                                    por <b><span class="text-muted">{{ candidato.editor.nome }}</span></b>
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% if candidato.votos is iterable %}
+            <div class="table-responsive"><table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Votos ({{ candidato.votosQtd }})</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in candidato.votos %}
+                    <tr>
+                        <td class="link">
+                            <a href="#{#{{ path('index', {'id': item.id}) }}#}" title="Acesse página do Voto">
+                                {{ item.view('criacao') }}
+                            </a>
+                        </td>
+                        <td class="link">
+                            <a href="#{#{{ path('index', {'id': item.id}) }}#}" title="Acesse página do Voto">
+                                {{ item.usuario.nome }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+            {% else %}
+            <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+{% endblock body %}
+        

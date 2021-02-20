@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block title %} Usuários {% endblock %}
+
+{% set menu = {
+    'Novo Usuário': {'href': path('admin-usuarios-usuario'), 'title': 'Adicionar um novo Usuário', 'icon': 'plus'},
+    'CPFs Permitidos': {'href': path('admin-cpfs'), 'title': 'Gestão dos CPFs permitidos para registro na Plataforma', 'icon': 'key'},
+} %}
+
+{% block body %}
+    {{ include('_helpers/form_pesquisa.html.twig', {form: form}, with_context = false) }} 
+    
+    {% if paginator is iterable and paginator|length > 0 %}
+        <div class="table-responsive"><table class="table table-hover">
+                <caption> Registros encontrados... </caption>
+                <thead>
+                    <tr>
+                        <th>E-mail</th><th>Nome</th><th>N. de Acesso</th><th>Confirmado</th><th>Ativo</th><th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="100"> {{ knp_pagination_render(paginator) }} </td> 
+                    </tr>        
+                </tfoot>
+                <tbody>
+                    {% for item in paginator %}
+                        <tr>
+                            <td class="link">
+                                <a href="{{ path('admin-usuarios-usuario', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Usuário">
+                                    <strong>{{ item.nome }}</strong> <br/>
+                                    <small class="text-muted">Acesso: {{ item.login.email }}</small>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-usuarios-usuario', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Usuário">
+                                    <strong>{{ item.view('doc') }}</strong>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-usuarios-usuario', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Usuário">
+                                    {{ item.view('nascimento') }}
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-usuarios-usuario', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Usuário">
+                                    <small>
+                                        <strong>{{ item.whatsapp }}</strong>
+                                        {% if item.telefone %}
+                                            <br/> {{ item.telefone }}
+                                        {% endif %}
+                                        {% if item.email %}
+                                            <br/> {{ item.email }}
+                                        {% endif %}
+                                        {% if item.logradouro or item.bairro or item.cidade or item.uf %}
+                                            <br/> {{ item.view('endereco_linha') }}
+                                        {% endif %}
+                                    </small>
+                                </a>
+                            </td>
+                            <td class="link">
+                                <a href="{{ path('admin-usuarios-usuario', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do Usuário">
+                                    {{ item.view('sexo_nome') }}
+                                </a>
+                            </td>
+                            <td class="actions">
+                                {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS')  %}
+                                    <a class="btn btn-danger" href="javascript: " title="Exclua este registro" onclick="excluirItemAjax('{{ path('admin-usuarios-excluir', {'id': item.id}) }}', $(this).parent().parent());"><i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+        {% else %}
+        <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+    {% endif %}
+
+{% endblock body %}

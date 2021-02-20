@@ -1,0 +1,11 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %} Registro {% endblock %}
+
+{% block body %}
+    {{ include('_helpers/form_vertical.html.twig', {'form': form, 'submit_label': 'Confirmar Registro'}, with_context = false) }}
+    <form id="form_login" name="form_login" enctype="application/x-www-form-urlencoded" method="post" action="" class="user form-vertical">
+        <hr/>
+        <a href="{{ path('app_login') }}" class="btn btn-google btn-user btn-block"> <i class="fa fa-user-circle fa-fw"></i> Sou cadastrado. Entrar!</a>
+    </form>
+{% endblock %}

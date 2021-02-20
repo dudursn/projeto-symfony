@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% if not login.id %} Novo {% endif %} Login {% endblock %}
+
+{% set menu = {
+'Voltar': {'href': path('admin-logins', {'page': app.request.query.get('page')}), 'title': 'Voltar a pesquisa de Login', 'icon': 'arrow-left'},
+} %}
+{% if login.id %}
+    {% set menu = menu|merge({
+        'Editar': {'href': "javascript: toogleDiv('div_form', 'logins_email');", 'title': 'Edite as informações deste Login', 'icon': 'pencil'},
+    }) %}
+    {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS') %}
+        {% set menu = menu|merge({
+            'Excluir': {'href': "javascript: ", 'title': 'Exclua este Login', 'onclick': "confirmUrl('" ~ path('admin-logins-excluir', {'id': login.id}) ~ "', 'Você confirma a exclusão do Login?')", 'icon': 'times'},
+        }) %}
+    {% endif %}
+{% endif %}
+
+{% block body %}
+<div id="div_form" class="{{ login.id?(form.vars.valid?'d-none':''):'' }}">
+    {% if login.id %}
+        <!--
+    <div class="well well-sm">
+        Edite as informações do Login...
+        <a class="btn btn-warning btn-sm" href="javascript: " onclick="toogleDiv('div_form');"><i class="fa fa-ban"></i> Cancelar Edição</a>
+    </div>
+    {% endif %} 
+    <!-- Campos fora do form 
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="atendimento" class="required control-label col-sm-2"> <?php echo $atendimento_id?('Atendimento'):($processo_id?'Processo':'');?></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">
+                    <b><?php echo $atendimento_id?($this->tarefa->atendimento()->view('numero')):($processo_id?$this->tarefa->processo()->view('numero_numero_alternativo'):'<span class="text-primary"><i class="fa fa-exclamation-triangle"></i> Sem Atendimento ou Processo</span>');?></b>
+                </p>
+            </div>
+        </div>
+    </div> 
+    <!-- / Campos fora do form-->
+    {{ include('_helpers/form_horizontal.html.twig', {'form': form, 'submit_label': 'Salvar'}, with_context = false) }}
+</div>
+
+{% if login.id %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row display">
+                <div class="col-md-12">
+                    <div class="row lead">
+                        <div class="col-md-12"> E-mail: <b>{{ login.email }} </b> {{ login.view('ativo_label')|raw }} {{ login.view('confirmado_label')|raw }} </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-12"> Nome: <b>{{ login.nome}} </b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12"> Pass: <b>******</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            Nível de Acesso: <b>{{ login.view('role_nome') }} </b>
+                            {% if login.role == 'ROLE_ASSINANTE' %}
+                            {% if login.assinante() %}
+                                <a class="btn btn-default btn-sm" href="{{ path('admin-assinantes-assinante', {'id': login.assinante.id}) }}"><i class="fa fa-user-o"></i> {{ login.assinante.nome }}</a>
+                            {% else %}
+                                <a class="btn btn-danger" href="{{ path('admin-assinantes-assinante', {'login': login.id}) }}"><i class="fa fa-user-o"></i> Adicionar Assinante</a>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12"> Hash: <b>{{ login.hash|default('Sem HASH') }} {{ login.hash ? '- Criado em ' ~ login.view('hash_criacao') : '' }}</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"> Confirmado: <b>{{ login.view('confirmado_sim_nao') }} </b></div>
+                        <div class="col-md-6"> Ativo: <b>{{ login.view('ativo_sim_nao') }} </b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <small class="text-muted">
+                                Criado em: <b><span class="text-muted">{{ login.view('criacao') }}</span></b> 
+                                por <b><span class="text-muted">{{ login.criador.nome|default('') }}</span></b>
+                                {% if login.editor %}
+                                    <br/>
+                                    Editado em <b><span class="text-muted">{{ login.view('edicao') }}</span></b>
+                                    por <b><span class="text-muted">{{ login.editor.nome }}</span></b>
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {#
+        <div class="col-md-12">
+            {% if login.loginsColaboradores is iterable %}
+            <div class="table-responsive"><table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Colaborador</th><th>Loja</th><th>Assinante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in login.loginsColaboradores %}
+                    <tr>
+                        <td class="link">
+                            <a href="{{ path('colaboradores-colaborador', {'id': item.colaborador.id}) }}" title="Acesse página do Colaborador">
+                                {{ item.colaborador.nome }}
+                                {{ (item.colaborador.razaoSocial ? '<br/><span class="text-muted">' ~ item.colaborador.razaoSocial ~ '</span>':'') | raw }}
+                                {{ (item.colaborador.role ? '<br/><span class="text-muted">' ~ item.colaborador.view('role_nome') ~ '</span>':'') | raw }}
+                            </a>
+                        </td>
+                        <td class="link">
+                            <a href="{{ path('admin-lojas-loja', {'id': item.colaborador.loja.id}) }}" title="Acesse página da Loja">
+                                {{ item.colaborador.loja.view('nome_razao_social') }}
+                            </a>
+                        </td>
+                        <td class="link">
+                            <a href="{{ path('admin-assinantes-assinante', {'id': item.colaborador.loja.assinante.id}) }}" title="Acesse página do Assinante">
+                                {{ item.colaborador.loja.assinante.view('nome_razao_social') }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+            {% else %}
+            <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+            {% endif %}
+        </div>
+        #}
+    </div>
+{% endif %}
+{% endblock body %}
+        

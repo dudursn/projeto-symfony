@@ -1,0 +1,20 @@
+Recuperacao de senha
+	Executando ultima migration
+		Campos criados em logins:
+			token_trocar_senha e data_geracao_token
+
+
+	Caminho para recuperacao
+		dominio/recuperacao/'token_trocar_senha'
+
+	Executar
+		 > composer require symfony/mailer
+
+	Configurar email em .env
+		MAILER_DSN
+
+	Para testar sem utilizar o email
+	> Ir no banco, ber o token de trocar senha 
+		Ex: a12fsd#pq
+	> Acessar a url:
+		Ex.:localhost:8000//recuperacao/a12fsd#pq

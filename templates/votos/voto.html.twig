@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% if not voto.id %} Novo {% endif %} Voto {% endblock %}
+
+{% if url %}
+    {% set menu = {
+        'Voltar': {'href': url, 'title': '', 'icon': 'arrow-left'},
+    } %}
+{% else %}
+    {% set menu = {
+        'Voltar': {'href': path('votos', {'page': app.request.query.get('page')}), 'title': 'Voltar a pesquisa de Voto', 'icon': 'arrow-left'},
+    } %}
+{% endif %}
+{#
+{% if voto.id %}
+    {% set menu = menu|merge({
+        'Editar': {'href': path('votos-voto', {id: voto.id, votando: true}), 'title': 'Altere seu voto neste candidato', 'icon': 'pencil'},
+    }) %}
+    {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS') %}
+        {% set menu = menu|merge({
+            'Excluir': {'href': "javascript: ", 'title': 'Exclua este Voto', 'onclick': "confirmUrl('" ~ path('votos-excluir', {'id': voto.id}) ~ "', 'Você confirma a exclusão do Voto?')", 'icon': 'times'},
+        }) %}
+    {% endif %}
+{% endif %}
+#}
+{% block body %}
+    {% if votando %}
+        {% if voto.candidato %}
+            <h3 class="text-primary">Confirme seu voto</h3>
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ asset('img/candidatos/candidato' ~ voto.candidato.id ~ '.jpg') }}" class="card-img" alt="{{ voto.candidato.apelido }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><span class="text-primary">{{ voto.candidato.apelido }}</span></h5>
+                            <h6 class="card-title">{{ voto.candidato.view('mandato_nome') }} - #{{ voto.candidato.numero }}</h6>
+                            <p class="card-text"><small>{{ voto.candidato.view('info_br') }}</small></p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('votos-voto', {eleicao: eleicoesMapper.eleicaoAtual.id, candidato: voto.candidato.id, votando: true, 'confirmar-voto': true}) }}" class="btn btn-success btn-lg btn-block"><i class="fa fa-fw fa-check"></i> Confirmar Voto</a>
+                            <a href="{{ path('votos-voto', {eleicao: eleicoesMapper.eleicaoAtual.id, votando: true}) }}" class="btn btn-secondary btn-block"><i class="fa fa-fw fa-times"></i> Cancelar Seleção</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% if eleicoesMapper.eleicaoAtual.candidatos is iterable %}
+                <h3 class="text-primary">Selecione um candidato</h3>
+                <div class="row">
+                    {% for item in eleicoesMapper.eleicaoAtual.candidatos %} 
+                        <div class="card mx-3" style="width: 300px;">
+                            <img src="{{ asset('img/candidatos/candidato' ~ item.id ~ '.jpg') }}" class="card-img-top" alt="{{ item.apelido }}">
+                            <div class="card-body">
+                                <h5 class="card-title"><span class="text-primary">{{ item.apelido }}</span></h5>
+                                <h6 class="card-title">{{ item.view('mandato_nome') }} - #{{ item.numero }}</h6>
+                                <p class="card-text"><small>{{ item.view('info_br') }}</small></p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ path('votos-voto', {eleicao: eleicoesMapper.eleicaoAtual.id, candidato: item.id}) }}" class="btn btn-success btn-block"><i class="fa fa-fw fa-check"></i> Votar</a>
+                                <!--<a href="#" class="btn btn-light">Propostas</a>-->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                    
+            {% endif %}
+        {% endif %}
+    {% elseif voto.id %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row display">
+                    <div class="col-md-12">
+                        <div class="row lead"> 
+                            <div class="col-md-12"> Eleição de <b>{{ voto.eleicao.ano }}</b></div>
+                        </div>
+                        <div class="row lead"> 
+                            <div class="col-md-12"> Voto: <b>{{ voto.candidato.apelido }} #{{- voto.candidato.numero }} <span class="text-muted">Candidato a {{ voto.candidato.view('mandato_nome') }}</span></b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <small class="text-muted">
+                                    Voto computado em: <b><span class="text-muted">{{ voto.view('criacao') }}</span></b> 
+                                    {% if voto.editor %}
+                                        <br/>
+                                        Editado em <b><span class="text-muted">{{ voto.view('edicao') }}</span></b>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock body %}
+        

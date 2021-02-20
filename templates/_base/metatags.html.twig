@@ -1,0 +1,43 @@
+{% if metatags_description is defined %}
+    <meta name="description" content="{{ metatags_description|raw }}" />
+    <meta property="og:description" content="{{ metatags_description|raw }}" />
+{% else %}
+    <meta name="description" content="Sistema de gestão financeira e controle empresarial" />
+    <meta property="og:description" content="Sistema de gestão financeira e controle empresarial" />
+{% endif %}
+            
+{% if metatags_robots is defined %}
+    <meta name="robots" content="{{ metatags_robots|raw }}" />
+{% else %}
+    <meta name="robots" content="noindex,follow" />
+{% endif %}
+
+{% if metatags_type is defined %}
+    <meta property="og:type" content="{{ metatags_type|raw }}" />
+{% else %}
+    <meta property="og:type" content="website" />
+{% endif %}
+
+{% if metatags_url is defined %}
+    <meta property="og:url" content="{{ metatags_url|raw }}" />
+{% else %}
+    <meta property="og:url" content="http://www.prismatis.com.br" />
+{% endif %}
+
+{% if metatags_site_name is defined %}
+    <meta property="og:site_name" content="{{ metatags_site_name|raw }}" />
+{% else %}
+    <meta property="og:site_name" content="Sistema Prismatis" />
+{% endif %}
+
+{% if metatags_image is defined %}
+    {% if metatags_image is iterable %}
+        {% for image in metatags_image %}
+            <meta property="og:image" content="{{ image|raw }}" />
+        {% endfor %}
+    {% else %}
+        <meta property="og:image" content="{{ metatags_image|raw }}" />
+    {% endif %}    
+{% else %}
+    <meta property="og:image" content="{{ absolute_url(asset('img/logo.png')) }}" />
+{% endif %}

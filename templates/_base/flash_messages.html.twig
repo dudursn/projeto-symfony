@@ -1,0 +1,23 @@
+{# Lê apenas as Flash Messages dos tipos "s": SUCCESS, "w": WARNING, "d": DANGER, "i": INFO, "t": Título Genérico; #}
+{# Títulos: "t": Titulo em Qualquer Tipo; "st": SUCCESS, "wt": WARNING, "dt": DANGER, "it": INFO #}
+{# Outros Tipos de Flass Messages são ignorados aqui... #}
+
+{% for label, messages in app.flashes(['d', 'w', 'i', 's']) %}
+    {% if messages is iterable and messages|length > 0 %}
+        <div class="alert alert-{{ label == 'd'?'danger':(label == 'w'?'warning':(label == 'i'?'info':(label == 's'?'success':''))) }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            
+            {% for title in app.flashes('t') %}
+                <p class="alert-title"> {{ title|raw }} </p>
+            {% endfor %}
+            
+            {% for title in app.flashes(label == 'd'?'dt':(label == 'w'?'wt':(label == 'i'?'it':(label == 's'?'st':'____'))) ) %}
+                <p class="alert-title"> {{ title|raw }} </p>
+            {% endfor %}
+            
+            {% for message in messages %}
+                <p> {{ message|raw }} </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}

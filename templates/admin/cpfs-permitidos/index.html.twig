@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title %} CPFs Permitidos {% endblock %}
+
+{% set menu = {
+    'Novo CPF': {'href': path('admin-cpfs-cpf'), 'title': 'Adicionar permissão para um CPF', 'icon': 'plus'},
+} %}
+
+{% block body %}
+    {{ include('_helpers/form_pesquisa.html.twig', {form: form}, with_context = false) }} 
+    
+    {% if paginator is iterable and paginator|length > 0 %}
+        <div class="table-responsive"><table class="table table-hover">
+                <caption> Registros encontrados... </caption>
+                <thead>
+                    <tr>
+                        <th>CPF</th><th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="100"> {{ knp_pagination_render(paginator) }} </td> 
+                    </tr>        
+                </tfoot>
+                <tbody>
+                    {% for item in paginator %}
+                        <tr>
+                            <td class="link">
+                                <a href="{{ path('admin-cpfs-cpf', {'id': item.id, 'page': app.request.query.get('page')}) }}" title="Acesse página do CPF Permitido">
+                                    {{ item.cpfFormatado }}
+                                </a>
+                            </td>
+                            
+                            <td class="actions">
+                                {% if is_granted('ROLE_ADMIN_EXCLUIR_PROTEGIDOS')  %}
+                                    <a class="btn btn-danger" href="javascript: " title="Exclua este registro" onclick="excluirItemAjax('{{ path('admin-cpfs-excluir', {'id': item.id}) }}', $(this).parent().parent());"><i class="fa fa-times"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+        {% else %}
+        <div class="alert alert-warning"> Nenhum resultado foi encontrado </div>
+    {% endif %}
+
+{% endblock body %}
